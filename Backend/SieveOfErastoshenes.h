@@ -1,6 +1,5 @@
 #include "PrimeGenerator.h"
-
-#include <vector>
+#include <iostream>
 
 class SieveOfErastoshenes : public PrimeGenerator
 {
@@ -10,8 +9,10 @@ class SieveOfErastoshenes : public PrimeGenerator
         int bound;
 
     public:
-        SieveOfErastoshenes();
+        SieveOfErastoshenes(int size);
         ~SieveOfErastoshenes();
-        long long int getPrime() override;
+        long long int getPrimeGreaterThan(int lowerBound) override;
+        std::vector<long long int> getPrimes() override;
+        void printSieve();
 
 };
