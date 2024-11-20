@@ -1,0 +1,48 @@
+CXX = g++
+CXXFLAGS =  -std=c++11 -Wall
+
+# Targets
+SERVER_TARGET = DemoMain
+TEST_TARGET = TestingMain
+
+# Source files
+COMMON_SRC = $(filter-out ServerMain.cpp TestingMain.cpp, $(wildcard *.cpp))
+SERVER_SRC = DemoMain.cpp $(COMMON_SRC)
+TEST_SRC = TestingMain.cpp $(COMMON_SRC)
+
+# Object files
+SERVER_OBJ = $(SERVER_SRC:.cpp=.o)
+TEST_OBJ = $(TEST_SRC:.cpp=.o)
+
+# Default target: compile both
+all: $(DEMO_TARGET) $(TEST_TARGET)
+
+# Compile demo executable
+$(DEMO_TARGET): $(DEMO_OBJ)
+	$(CXX) $(CXXFLAGS) -o $(DEMO_TARGET) $(DEMO_OBJ)
+
+# Compile test executable
+$(TEST_TARGET): $(TEST_OBJ)
+	$(CXX) $(CXXFLAGS) -o $(TEST_TARGET) $(TEST_OBJ)
+
+# Compile .o files from .cpp
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Clean
+clean:
+	rm -f $(DEMO_OBJ) $(TEST_OBJ) $(DEMO_TARGET) $(TEST_TARGET)
+
+# Run demo
+run_server:
+	./$(SERVER_TARGET)
+
+# Run unit tests
+run_tests:
+	./$(TEST_TARGET)
+
+memory_tests:
+	valgrind --leak-check=full ./$(TEST_TARGET)
+
+server_tests:
+	valgrind --leak-check=full ./$(SERVER_TARGET)
